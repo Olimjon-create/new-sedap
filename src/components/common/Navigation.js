@@ -3,7 +3,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import styles from "@/styles/Aside.module.css";
-import Section from "./Section";
 import Image from "next/image";
 
 function Navigation(props) {
@@ -148,7 +147,6 @@ function Navigation(props) {
           <p>Made with ♥ by Peterdraw</p>
         </div>
       </aside>
-      {/* <Section/> */}
     </div>
   );
 }
