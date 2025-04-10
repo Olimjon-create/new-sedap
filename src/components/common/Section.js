@@ -1,31 +1,22 @@
-import React from "react";
-import Head from "next/head";
-import Link from "next/link";
-import Status from "./Status";
-import Calendar from "./Calendar";
-import styles from "@/styles/order.module.css";
-import Table from "../pages/orders/Table";
+import Document, { Html, Head, Main, NextScript } from "next/document";
 
-export default function Section() {
-  return (
-    <>
-      <Head>
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700&display=swap"
-        />
-      </Head>
-      <div>
-        <div className={styles["orderDiv"]}>
-          <div className={styles["calendar"]}>
-            <Status />
-            <Calendar />
-          </div>
-        </div>
-        <div className={"tableData"}>
-          <Table />
-        </div>
-      </div>
-    </>
-  );
+class MyDocument extends Document {
+  render() {
+    return (
+      <Html lang="en">
+        <Head>
+          <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700&display=swap"
+          />
+        </Head>
+        <body>
+          <Main />
+          <NextScript />
+        </body>
+      </Html>
+    );
+  }
 }
+
+export default MyDocument;

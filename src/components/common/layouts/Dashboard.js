@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "../styles/Dashboard.module.css";
-
+import Image from "next/image";
 const Dashboard = () => {
   return (
     <div>
@@ -26,7 +26,7 @@ const Dashboard = () => {
           <div className={styles.Total_About} key={index}>
             <div className={styles.Total_Orders}>
               <div className={styles.img_src}>
-                <img
+                <Image
                   className={styles.Total_img}
                   src="./img/Icon_Order.svg"
                   alt="order icon"
@@ -36,7 +36,7 @@ const Dashboard = () => {
                 <h2 className={styles.your_text}>75</h2>
                 <p className={styles.your_text2}>Total Orders</p>
                 <h2 className={styles.percentage}>
-                  <img
+                  <Image
                     className={styles.Total_img2}
                     src="./img/Icon (6).png"
                     alt="percentage icon"
