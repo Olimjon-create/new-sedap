@@ -1,23 +1,27 @@
 import React from "react";
 import PageTitle from "@/components/common/PageTitle";
-import CustomerTable from "./customerTable.js";
+import CustomerTable from "../customers/CustomerTable";
 import styles from "@/styles/order.module.css";
-import CustomerFilter from "./customerFilter";
+import OrderFilter from "./OrderFilter";
 
-export default function CustomersList() {
+export default function CustomerDetailList() {
   return (
     <>
       <div className={styles["orderDiv"]}>
-        <PageTitle title="" subtitle="" />
+        <PageTitle
+          title="General Customer"
+          subtitle="Here is your general customers list data"
+        />
         <div className={styles["calendar"]}>
-          <CustomerFilter />
+          <OrderFilter />
         </div>
       </div>
       <div className={"tableData"}>
         <CustomerTable />
       </div>
       {/* <PageTitle
-
+        title="General Customer"
+        subtitle="Here is your general customers list data"
       />
       <CustomerTable /> */}
     </>

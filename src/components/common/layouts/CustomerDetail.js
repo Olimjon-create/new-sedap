@@ -1,90 +1,131 @@
 import React from "react";
-import styles from "../../../styles/customerDetail.module.css";
+import styles from "../../../styles/.module.css";
 
-export default function CustomerDetail() {
+export default function () {
+  const arr3 = [
+    {
+      id: 1,
+      name: "Medium Spicy Spaghetti Italiano",
+      cost: "SPAGHETTI",
+      constOurs: "Serves for 4 Persons, 24mins",
+      price: "$12.56",
+    },
+    {
+      id: 2,
+      name: "Medium Spicy Spaghetti Italiano",
+      cost: "SPAGHETTI",
+      constOurs: "Serves for 4 Persons, 24mins",
+      price: "$12.56",
+    },
+    {
+      id: 3,
+      name: "Medium Spicy Spaghetti Italiano",
+      cost: "SPAGHETTI",
+      constOurs: "Serves for 4 Persons, 24mins",
+      price: "$12.56",
+    },
+    {
+      id: 4,
+      name: "Medium Spicy Spaghetti Italiano",
+      cost: "SPAGHETTI",
+      constOurs: "Serves for 4 Persons, 24mins",
+      price: "$12.56",
+    },
+    {
+      id: 5,
+      name: "Medium Spicy Spaghetti Italiano",
+      cost: "SPAGHETTI",
+      constOurs: "Serves for 4 Persons, 24mins",
+      price: "$12.56",
+    },
+    {
+      id: 6,
+      name: "Medium Spicy Spaghetti Italiano",
+      cost: "SPAGHETTI",
+      constOurs: "Serves for 4 Persons, 24mins",
+      price: "$12.56",
+    },
+  ];
+
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <h1>Customer Detail</h1>
-        <span>Hello, Samantha</span>
-      </div>
-
-      <div className={styles.profileSection}>
-        <div className={styles.profileCard}>
-          <div className={styles.profilePic}></div>
+      <div className={`${styles.card} ${styles.profile}`}>
+        <div className={styles.profileLeft}>
+          <div className={styles.profileImg}></div>
           <div className={styles.profileInfo}>
             <h2>Eren Yeager</h2>
-            <p className={styles.jobTitle}>UX Designer</p>
-            <p>St. King’s Road Street, Garden Hill, Chelsea - London</p>
-            <div className={styles.tags}>
+            <p style={{ color: "#10b981" }}>UX Designer</p>
+            <p>St. Kings Road 57th, Garden Hills, Chelsea - London</p>
+            <div className={styles.contact}>
               <span>eren.yeager@mail.co.id</span>
               <span>+012 345 6789</span>
               <span>Highspeed Studios</span>
             </div>
           </div>
         </div>
+      </div>
 
-        <div className={styles.balanceCard}>
-          <div>
-            <p>Your Balance</p>
-            <h2>$9,425</h2>
-            <p>2451 ** **</p>
-          </div>
-          <div className={styles.balanceBottom}>
-            <p>02/21</p>
-            <p>Eren Yeager</p>
-          </div>
+      <div className={`${styles.card} ${styles.balance}`}>
+        <h2>Your Balance</h2>
+        <p style={{ fontSize: "52px", fontFamily: "sans-serif" }}>$9,425</p>
+        <p>245| ** **</p>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginTop: "10px",
+          }}
+        >
+          <span>02/21</span>
+          <span>Eren Yeager</span>
         </div>
       </div>
 
       <div className={styles.grid}>
         <div className={styles.card}>
           <h3>Most Ordered Food</h3>
-          <div className={styles.orderItem}>
-            <div className={styles.orderLeft}>
-              <div className={styles.orderImg}></div>
-              <div className={styles.orderText}>
-                <p>Medium Spicy Spaghetti Italiano</p>
-                <small>Spaghetti | 3 dishes</small>
+          {arr3.map((item) => (
+            <div key={item.id} className={styles.foodItem}>
+              <div className={styles.foodItemLeft}>
+                <div className={styles.foodImg}></div>
+                <div>
+                  <strong>{item.name}</strong>
+                  <p style={{ color: "gray", fontSize: "14px" }}>
+                    {item.cost} • {item.constOurs}
+                  </p>
+                </div>
               </div>
+              <span>{item.price}</span>
             </div>
-            <p>$12.56</p>
-          </div>
+          ))}
         </div>
 
         <div className={styles.card}>
           <h3>Most Liked Food</h3>
-          <div className={styles.chart}>
-            <div className={styles.chartLabel}>
-              <div className={styles.bar} style={{ height: "32px" }}></div>
-              <span>Sun</span>
-            </div>
-            <div className={styles.chartLabel}>
-              <div className={styles.bar} style={{ height: "48px" }}></div>
-              <span>Mon</span>
-            </div>
-            <div className={styles.chartLabel}>
-              <div className={styles.bar} style={{ height: "64px" }}></div>
-              <span>Tue</span>
-            </div>
-            <div className={styles.chartLabel}>
-              <div className={styles.bar} style={{ height: "56px" }}></div>
-              <span>Wed</span>
-            </div>
-            <div className={styles.chartLabel}>
-              <div className={styles.bar} style={{ height: "72px" }}></div>
-              <span>Thu</span>
-            </div>
-            <div className={styles.chartLabel}>
-              <div className={styles.bar} style={{ height: "96px" }}></div>
-              <span>Fri</span>
-            </div>
-            <div className={styles.chartLabel}>
-              <div className={styles.bar} style={{ height: "120px" }}></div>
-              <span>Sat</span>
-            </div>
+          <div className={styles.barChart}>
+            <div className={`${styles.bar} ${styles.spaghetti}`}></div>
+            <div className={`${styles.bar} ${styles.pizza}`}></div>
+            <div className={`${styles.bar} ${styles.burger}`}></div>
+            <div className={`${styles.bar} ${styles.sprite}`}></div>
+            <div
+              className={`${styles.bar} ${styles.spaghetti}`}
+              style={{ height: "40%" }}
+            ></div>
+            <div
+              className={`${styles.bar} ${styles.pizza}`}
+              style={{ height: "20%" }}
+            ></div>
+            <div className={`${styles.bar} ${styles.green}`}></div>
           </div>
-          <div className={styles.likesInfo}>763 Likes • Jan 23rd, 2020</div>
+          <p
+            style={{
+              textAlign: "right",
+              fontSize: "14px",
+              marginTop: "10px",
+            }}
+          >
+            763 Likes - Oct 14th, 2023
+          </p>
         </div>
       </div>
     </div>

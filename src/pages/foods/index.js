@@ -20,8 +20,8 @@ export default function Customers() {
   );
 }
 
-FoodsList.getLayout = (pageProps) => (
+Customers.getLayout = (pageProps) => (
   <MainLayout>
-    <FoodsList {...pageProps} />
+    <Customers {...pageProps} />
   </MainLayout>
 );

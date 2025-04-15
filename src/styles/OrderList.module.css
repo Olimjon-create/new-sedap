@@ -6,10 +6,7 @@
 }
 
 .search input {
-  margin: 0px 60px;
-  margin-top: 30px;
-  width: 1468px;
-  height: 56px;
+  width: 866px;
   max-width: 500px;
   height: 56px;
   border-radius: 8px;
@@ -17,6 +14,7 @@
   border: 1px solid #ccc;
   font-size: 16px;
   outline: none;
+  margin-left: 160px;
   background-color: #fff;
 }
 
@@ -39,7 +37,41 @@
 .writeName {
   margin-top: 20px;
 }
-
+.btn1 {
+  width: 212px;
+  height: 68px;
+  border-radius: 12px;
+  padding-top: 22px;
+  padding-right: 16px;
+  padding-bottom: 22px;
+  padding-left: 16px;
+  border: none;
+  outline: none;
+  background-color: #f4f4f4;
+  font-family: sans-serif;
+  font-size: 16px;
+  color: #3e4954;
+}
+.btn2 {
+  width: 212px;
+  height: 68px;
+  border-radius: 12px;
+  padding-top: 22px;
+  padding-right: 16px;
+  padding-bottom: 22px;
+  padding-left: 16px;
+  border: none;
+  outline: none;
+  background-color: #f4f4f4;
+  margin-top: 30px;
+  margin-left: 10px;
+  font-family: sans-serif;
+  font-size: 16px;
+  color: #3e4954;
+}
+.writerImg {
+  align-items: center;
+}
 .customerText {
   font-family: sans-serif;
   font-size: 16px;
@@ -58,18 +90,13 @@
 
 .orderDiv {
   display: flex;
-  width: 100%;
-  height: 68px;
   justify-content: space-between;
-  margin: 40px 0;
   font-family: "Barlow", sans-serif;
-  margin-left: 30px;
+  margin-bottom: 40px;
 }
-
 .calendar {
   display: flex;
 }
-
 .status {
   display: flex;
   justify-content: center;
@@ -78,107 +105,111 @@
   background-color: white;
   border-radius: 12px;
 }
-
 .status img {
   width: 24px;
   height: 24px;
   margin: auto 0;
 }
-
 .status select {
   outline-style: none;
   border: none;
   font-size: 16px;
 }
-
 .th div {
   display: flex;
   align-items: center;
   justify-content: left;
 }
-
 .th img {
   width: 10px;
   height: 6px;
 }
-
-.table,
 .orderTable {
   width: 100%;
   font-family: "Barlow", sans-serif;
   border-collapse: collapse;
 }
-
-.table .th,
-.orderTable .th,
-.table .td,
-.orderTable .td {
-  padding: 0px 55px;
+.orderTable thead {
+  background-color: #00b074;
+  color: white;
 }
-
 .orderTable .tr th {
   padding: 24px 0;
 }
-
 .orderTable .tr th:first-child,
 .orderTable .tr td:first-child {
   padding-left: 70px;
 }
-
 .orderTable .tr td {
   padding: 12px 0;
 }
 
-.tr {
-  height: 70px;
-  background-color: #00b074;
-  color: white;
-}
-
-.tr2 {
-  height: 70px;
-  background-color: white;
-}
-
-.orderTable .th:nth-child(1),
-.orderTable .td:nth-child(1) {
+.orderTable .th:nth-child(1) {
   border-bottom-left-radius: 15px;
   border-top-left-radius: 15px;
 }
-
-.orderTable .th:nth-child(6),
-.orderTable .td:nth-child(8) {
+.orderTable .th:nth-child(6) {
   border-bottom-right-radius: 15px;
   border-top-right-radius: 15px;
 }
 
-.onDelivery,
-.newOrder,
-.delivered {
+.onDelivery {
   width: 150px;
   height: 50px;
+  background-color: #2d9cdb26;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 15px;
-  color: white;
-}
-
-.onDelivery {
-  background-color: #2d9cdb26;
   color: #2d9cdb;
 }
-
 .newOrder {
+  width: 150px;
+  height: 50px;
   background-color: #ff6d4d1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
   color: #ff6d4d;
 }
-
 .delivered {
+  width: 150px;
+  height: 50px;
   background-color: #00b07426;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
   color: #177556;
+}
+
+.orderTable .th:nth-child(1) {
+  border-bottom-left-radius: 15px;
+  border-top-left-radius: 15px;
+}
+.orderTable .th:nth-child(6) {
+  border-bottom-right-radius: 15px;
+  border-top-right-radius: 15px;
 }
 
 .orderTable tbody .tr:hover {
   background-color: aliceblue;
+}
+.orderTable .td:nth-child(1) {
+  border-bottom-left-radius: 15px;
+  border-top-left-radius: 15px;
+}
+.orderTable .td:nth-child(8) {
+  border-bottom-right-radius: 15px;
+  border-top-right-radius: 15px;
+}
+.blass {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.blass_right button {
+  display: flex;
+  justify-content: space-between;
 }

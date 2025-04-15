@@ -2,7 +2,7 @@ import React from "react";
 import styles from "@/styles/order.module.css";
 import Image from "next/image";
 
-function CustomerFilter() {
+function CustomerDetailFilter() {
   return (
     <div>
       <div className={styles["status"]}>
@@ -22,4 +22,4 @@ function CustomerFilter() {
   );
 }
 
-export default CustomerFilter;
+export default CustomerDetailFilter;
