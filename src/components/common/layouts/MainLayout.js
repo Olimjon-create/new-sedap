@@ -19,7 +19,6 @@ function MainLayout(props) {
       <div style={{ display: "flex", minWidth: "100wh" }}>
         <Navigation />
         {/* <h1 style={{ display: router.asPath === "/" ? "block" : "none" }}>
-          Dashboard
         </h1> */}
         <div style={{ display: router.asPath === "/" ? "block" : "none" }}>
           <h1 style={{ marginLeft: "20px" }}>Olimjon </h1>

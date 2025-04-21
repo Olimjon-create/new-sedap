@@ -2,9 +2,9 @@ import Head from "next/head";
 import MainLayout from "@/components/common/layouts/MainLayout";
 import styles from "@/styles/Home.module.css";
 import Foods from "@/components/common/Foods";
-// import CustomerDetail from "../../../components/pages-components/CustomerTop/CustomerDetail";
+import CustomerDetail from "../../../components/pages-components/CustomerTop/CustomerDetail";
 
-export default function Customers() {
+export default function CustomerDetailPage() {
   return (
     <>
       <Head>
@@ -13,11 +13,15 @@ export default function Customers() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div>{/* <CustomerDetail /> */}</div>
+      <div>
+        <CustomerDetail />
+      </div>
     </>
   );
 }
 
-Customers.getLayout = (pageProps) => (
-  <MainLayout>{/* <CustomerDetail {...pageProps} /> */}</MainLayout>
+CustomerDetailPage.getLayout = (pageProps) => (
+  <MainLayout>
+    <CustomerDetail {...pageProps} />
+  </MainLayout>
 );

@@ -22,8 +22,6 @@ import {
 } from "@mui/icons-material";
 
 function Navigation() {
-  const router = useRouter();
-
   const links = [
     {
       id: 1,

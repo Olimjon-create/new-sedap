@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "../../../styles/.module.css";
 
-export default function () {
+function CustomerDetail() {
   const arr3 = [
     {
       id: 1,
@@ -131,3 +131,5 @@ export default function () {
     </div>
   );
 }
+
+export default CustomerDetail;

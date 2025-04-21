@@ -135,6 +135,9 @@ function OrderDetail() {
               <TableCell>
                 <strong>Total Price</strong>
               </TableCell>
+              <TableCell>
+                <strong>Total Price</strong>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
