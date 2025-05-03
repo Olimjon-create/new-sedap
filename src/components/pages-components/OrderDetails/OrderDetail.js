@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import styles from "../../../styles/OrderDetail.module.css";
-
+import { useRouter } from "next/router";
 import {
   Table,
   TableBody,
@@ -21,7 +20,7 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import StoreIcon from "@mui/icons-material/Store";
 
 function OrderDetail() {
-  const orderItems = [
+  const [orderItems, setOrderItems] = useState([
     {
       id: 1,
       category: "MAIN COURSE",
@@ -46,80 +45,182 @@ function OrderDetail() {
       price: 10.8,
       totalPrice: 54.0,
     },
-  ];
+  ]);
+
+  const removeItem = (id) => {
+    setOrderItems(orderItems.filter((item) => item.id !== id));
+  };
 
   return (
     <>
-      <div className={styles.live}>
-        <div className={styles.inputCustomerSearch}>
-          <div className={styles.search}>
-            <input type="search" placeholder="Search here" />
-          </div>
-          <div className={styles.iconSearch}>
-            <Image
-              className={styles.imgTag}
-              src="/alarmClock.png"
-              alt="Search"
-              width={28}
-              height={28}
-            />
-          </div>
-          <div className={styles.iconSearch}>
-            <Image
-              className={styles.imgTag}
-              src="/message.png"
-              alt="List"
-              width={28}
-              height={28}
-            />
-          </div>
-          <div className={styles.iconSearch}>
-            <Image
-              className={styles.imgTag}
-              src="/price.png"
-              alt="Price"
-              width={28}
-              height={28}
-            />
-          </div>
-          <div className={styles.iconSearch}>
-            <Image
-              className={styles.imgTag}
-              src="/settings.png"
-              alt="Settings"
-              width={28}
-              height={28}
-            />
-          </div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
 
-          <div className={styles.writeName}>
-            <p className={styles.customerText}>Hello, Samantha</p>
+          borderRadius: "10px",
+          marginTop: "30px",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "20px",
+            marginTop: "30px",
+          }}
+        >
+          <div>
+            <input
+              type="search"
+              placeholder="Search here"
+              style={{
+                width: "1468px",
+                height: "56px",
+                maxWidth: "500px",
+                height: "56px",
+                borderRadius: "8px",
+                paddingLeft: "10px",
+                border: "1px solid #ccc",
+                fontSize: "16px",
+                outline: "none",
+                backgroundColor: "#fff",
+                marginTop: "30px",
+                margin: "0px 60px",
+              }}
+            />
           </div>
-          <div className={styles["borders"]}></div>
+          {[
+            "/alarmClock.png",
+            "/message.png",
+            "/price.png",
+            "/settings.png",
+          ].map((src, idx) => (
+            <div
+              key={idx}
+              style={{
+                width: "48px",
+                height: "48px",
+                borderRadius: "8px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                cursor: "pointer",
+                marginLeft: "10px",
+                backgroundColor: "#2d9cdb26",
+              }}
+            >
+              <Image
+                className="imgTag"
+                src={src}
+                alt="Search"
+                width={28}
+                height={28}
+              />
+            </div>
+          ))}
+          <div style={{ marginTop: "20px" }}>
+            <p
+              style={{
+                fontFamily: "sans-serif",
+                fontSize: "16px",
+                color: "#464255",
+                marginTop: "-20px",
+                cursor: "pointer",
+              }}
+            >
+              Hello, Samantha
+            </p>
+          </div>
         </div>
       </div>
 
-      <Box className={styles.YourOrders}>
-        <Box className={styles.yourDetail}>
-          <Typography variant="h5" className={styles.texts6}>
+      <Box
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          maxWidth: "1060px",
+          margin: "30px auto",
+          padding: "20px",
+          backgroundColor: "#ffffff",
+          borderRadius: "10px",
+          boxShadow: "0 4px 10px rgba(0, 0, 0, 0.06)",
+          margin: "0px 60px",
+          marginTop: "30px",
+        }}
+      >
+        <Box style={{ display: "flex", flexDirection: "column" }}>
+          <Typography
+            variant="h5"
+            style={{ fontSize: "24px", color: "#2d3436", marginBottom: "6px" }}
+          >
             Order ID #5552351
           </Typography>
-          <Typography variant="body2" className={styles.texts7}>
+          <Typography
+            variant="body2"
+            style={{ fontSize: "14px", color: "#636e72" }}
+          >
             Orders / Orders / Order Details
           </Typography>
         </Box>
 
-        <Box className={styles.yourDetails}>
-          <Button variant="outlined" color="error" className={styles.btn}>
+        <Box
+          style={{
+            display: "flex",
+            gap: "12px",
+            flexWrap: "wrap",
+            justifyContent: "space-between",
+          }}
+        >
+          <Button
+            variant="outlined"
+            color="error"
+            style={{
+              width: "234px",
+              height: "58px",
+              color: "#ff5b5b",
+              padding: "10px 20px",
+              fontSize: "14px",
+              border: "none",
+              borderRadius: "6px",
+              border: "2px solid #ff5b5b",
+              cursor: "pointer",
+              transition: "background-color 0.3s ease, transform 0.2s ease",
+            }}
+          >
             Cancel Order
           </Button>
-          <Button variant="contained" color="success" className={styles.btn1}>
+          <Button
+            variant="contained"
+            color="success"
+            style={{
+              width: "234px",
+              height: "58px",
+              backgroundColor: "#00b894",
+              color: "#ffffff",
+            }}
+          >
             On Delivery
           </Button>
         </Box>
       </Box>
 
-      <TableContainer component={Paper} className={styles.tableWrapper}>
+      <TableContainer
+        component={Paper}
+        style={{
+          maxWidth: "1060px",
+          margin: "20px auto",
+          border: "2px solid #00b894",
+          borderRadius: "10px",
+          margin: "0px 60px",
+          overflow: "hidden",
+          marginTop: "30px",
+        }}
+      >
         <Table>
           <TableHead>
             <TableRow>
@@ -136,7 +237,7 @@ function OrderDetail() {
                 <strong>Total Price</strong>
               </TableCell>
               <TableCell>
-                <strong>Total Price</strong>
+                <strong>Remove</strong>
               </TableCell>
             </TableRow>
           </TableHead>
@@ -144,17 +245,33 @@ function OrderDetail() {
             {orderItems.map((item) => (
               <TableRow key={item.id}>
                 <TableCell>
-                  <div className={styles.itemInfo}>
-                    <div className={styles.itemCategory}>{item.category}</div>
-                    <div className={styles.itemName}>{item.name}</div>
-                    <div className={styles.rating}>⭐ ⭐ ⭐ ⭐</div>
+                  <div style={{ textAlign: "left" }}>
+                    <div
+                      style={{
+                        color: "#00b894",
+                        fontSize: "12px",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.5px",
+                      }}
+                    >
+                      {item.category}
+                    </div>
+                    <div style={{ fontWeight: "bold", margin: "5px 0" }}>
+                      {item.name}
+                    </div>
+                    <div style={{ color: "#636e72", fontSize: "12px" }}>
+                      ⭐ ⭐ ⭐ ⭐
+                    </div>
                   </div>
                 </TableCell>
                 <TableCell>{item.qty}x</TableCell>
                 <TableCell>${item.price.toFixed(2)}</TableCell>
                 <TableCell>${item.totalPrice.toFixed(2)}</TableCell>
                 <TableCell>
-                  <IconButton className={styles.remove}>
+                  <IconButton
+                    style={{ cursor: "pointer", color: "red" }}
+                    onClick={() => removeItem(item.id)}
+                  >
                     <CloseIcon />
                   </IconButton>
                 </TableCell>
@@ -164,36 +281,108 @@ function OrderDetail() {
         </Table>
       </TableContainer>
 
-      <Box className={styles.borderline}>
+      <Box
+        style={{
+          backgroundColor: "#f0f8ff",
+          padding: "20px",
+          borderRadius: "10px",
+          margin: "30px auto",
+          width: "100%",
+          maxWidth: "1060px",
+          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.04)",
+          margin: "0px 60px",
+          marginTop: "30px",
+        }}
+      >
         <Image
-          className={styles.mright}
+          style={{
+            width: "100%",
+            height: "auto",
+            borderRadius: "10px",
+            marginBottom: "20px",
+          }}
           src="/map.png"
           width={760}
           height={380}
           alt="map"
         />
-        <Typography variant="subtitle1" className={styles.fontSize}>
+        <Typography
+          variant="subtitle1"
+          style={{
+            fontSize: "22px",
+            fontWeight: "600",
+            margin: "20px 0",
+            color: "#2c3e50",
+          }}
+        >
           Delivery by
         </Typography>
 
-        <Box className={styles.df}>
+        <Box
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            gap: "20px",
+          }}
+        >
           <Image src="/grayraur.png" width={60} height={60} alt="rider" />
-          <Box className={styles.mtoptxt}>
+          <Box
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+            }}
+          >
             <Typography>Kevin Hobs Jr.</Typography>
             <Typography>ID - 412455</Typography>
           </Box>
 
-          <Box className={styles.df22}>
-            <PhoneIcon className={styles.mleft_img} />
-            <Box className={styles.mleft}>
+          <Box
+            style={{
+              display: "flex",
+              alignItems: "center",
+              border: "1px solid #2d9cdb",
+              padding: "10px",
+              borderRadius: "10px",
+              minWidth: "220px",
+              backgroundColor: "#ffffff",
+              flex: 1,
+            }}
+          >
+            <PhoneIcon style={{ marginRight: "10px" }} />
+            <Box
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+              }}
+            >
               <Link href="https://github.com/">Call</Link>
               <Typography>+12 345 5662 66</Typography>
             </Box>
           </Box>
 
-          <Box className={styles.df12}>
-            <StoreIcon className={styles.mleft_img} />
-            <Box className={styles.mleft}>
+          <Box
+            style={{
+              display: "flex",
+              alignItems: "center",
+              border: "1px solid #2d9cdb",
+              padding: "10px",
+              borderRadius: "10px",
+              minWidth: "220px",
+              backgroundColor: "#ffffff",
+              flex: 1,
+            }}
+          >
+            <StoreIcon style={{ marginRight: "10px" }} />
+            <Box
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+              }}
+            >
               <Typography>Delivery Time</Typography>
               <Typography>12:52</Typography>
             </Box>

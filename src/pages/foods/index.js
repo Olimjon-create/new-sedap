@@ -1,60 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Head from "next/head";
-import MainLayout from "@/components/common/layouts/MainLayout";
-import styles from "../../styles/foods.module.css";
-
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
-import DialogContentText from "@mui/material/DialogContentText";
-
-const initialFoods = [
-  {
-    id: 1,
-    name: "Spicy Mozarella with Barbeque",
-    category: "Food / Noodle",
-    href: "#",
-  },
-  {
-    id: 2,
-    name: "Burger Jumbo Special With Spicy",
-    category: "Food / Burger",
-    href: "#",
-  },
-  {
-    id: 3,
-    name: "Pizza la Piazza Special Nuggets",
-    category: "Food / Pizza",
-    href: "#",
-  },
-  {
-    id: 4,
-    name: "Pizza la Piazza Special Nuggets",
-    category: "Food / Pizza",
-    href: "#",
-  },
-  {
-    id: 5,
-    name: "Pizza la Piazza Special Nuggets",
-    category: "Food / Pizza",
-    href: "#",
-  },
-  {
-    id: 6,
-    name: "Pizza la Piazza Special Nuggets",
-    category: "Food / Pizza",
-    href: "#",
-  },
-];
-
+import { useRouter } from "next/router";
+import MainLayout from "@/components/common/layouts/MainLayout";
+import useFetchApiItems from "@/hooks/useFetchApilItems";
 export default function New() {
-  const [foods, setFoods] = useState(initialFoods);
+  const [foods, setFoods] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedFood, setSelectedFood] = useState(null);
+  const [inputValue, setInputValue] = useState("");
+  const router = useRouter();
+
+  const [items, isLoading] = useFetchApiItems(
+    "/foods?populate[type][populate][0]=category"
+  );
+
+  useEffect(() => {
+    if (items && Array.isArray(items)) {
+      setFoods(items);
+    }
+  }, [items]);
+
+  const filteredFoods = useMemo(() => {
+    return foods.filter(
+      (food) =>
+        food.name.toLowerCase().includes(inputValue.toLowerCase()) ||
+        food.category.toLowerCase().includes(inputValue.toLowerCase())
+    );
+  }, [inputValue, foods]);
 
   const handleDeleteClick = (food) => {
     setSelectedFood(food);
@@ -74,6 +53,16 @@ export default function New() {
     setSelectedFood(null);
   };
 
+  const handleClick = (action, id) => {
+    if (action === "View") {
+      router.push(`/foods/${id}`);
+    } else if (action === "Edit") {
+      router.push(`/foods/${id}/edit`);
+    }
+  };
+
+  const handleInputChange = (e) => setInputValue(e.target.value);
+
   return (
     <>
       <Head>
@@ -83,82 +72,233 @@ export default function New() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div>
-        <div className={styles.live}>
-          <div className={styles.inputCustomerSearch}></div>
-          <div className="colum">
-            <h1 className={styles.text8}>Foods</h1>
-            <p className={styles.text9}>
+      <div style={{ padding: "20px" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "40px",
+          }}
+        >
+          <div>
+            <h1 style={{ fontSize: "32px", color: "#464255" }}>Foods</h1>
+            <p
+              style={{ fontSize: "18px", color: "#a3a3a3", marginTop: "15px" }}
+            >
               Here is your menus summary with graph view
             </p>
           </div>
+
+          <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+            <div style={{ position: "relative", width: "491px" }}>
+              <img
+                src="/search.png"
+                alt="search"
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "18px",
+                  transform: "translateY(-50%)",
+                  width: "20px",
+                  height: "20px",
+                }}
+              />
+              <input
+                type="text"
+                value={inputValue}
+                onChange={handleInputChange}
+                placeholder="Search here"
+                style={{
+                  width: "100%",
+                  height: "68px",
+                  borderRadius: "14px",
+                  paddingLeft: "50px",
+                  fontSize: "18px",
+                  border: "none",
+                  color: "#aaaaaa",
+                  backgroundColor: "#fff",
+                }}
+              />
+            </div>
+
+            <button
+              style={{
+                width: "68px",
+                height: "68px",
+                borderRadius: "15px",
+                border: "none",
+                backgroundColor: "#ffffff",
+              }}
+            >
+              <img src="../grids.png" alt="grid" />
+            </button>
+            <button
+              style={{
+                width: "68px",
+                height: "68px",
+                borderRadius: "15px",
+                border: "none",
+                backgroundColor: "#ffffff",
+              }}
+            >
+              <img src="../GreenGrids.png" alt="grid active" />
+            </button>
+
+            <button
+              onClick={() => router.push("/foods/new")}
+              style={{
+                width: 181,
+                height: 68,
+                borderRadius: "10px",
+                background: "green",
+                border: "none",
+                outline: "none",
+                fontSize: "18px",
+                fontFamily: "sans-serif",
+                color: "#fff",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "10px",
+                cursor: "pointer",
+              }}
+            >
+              <img
+                style={{
+                  width: "24px",
+                  height: "24px",
+                  marginTop: "-3px",
+                }}
+                src="../contact.png"
+                alt="icon"
+              />
+              New Menu
+            </button>
+          </div>
         </div>
 
-        <div className={styles["food-cards"]}>
-          {foods.map((food) => (
-            <Link key={food.id} href={food.href || "#"} passHref>
-              <div className={styles["card_button"]}>
-                <div className={styles["radius_button"]}></div>
-                <h1 className={styles["text_5"]}>{food.name}</h1>
-                <p className={styles["text_6"]}>
-                  <span className={styles["text_7"]}>Food</span> {food.category}
-                </p>
-                <div className={styles["ddd"]}>
-                  <div className={styles["food_button"]}>
-                    <Image src="/view.png" alt="View" width={28} height={28} />
-                    <p>views</p>
-                  </div>
-                  <div className={styles["food_button"]}>
-                    <Image
-                      src="/stories.png"
-                      alt="Edit"
-                      width={28}
-                      height={28}
-                    />
-                    <p>Edit</p>
-                  </div>
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "30px",
+            justifyContent: "center",
+          }}
+        >
+          {isLoading ? (
+            <p style={{ fontSize: "24px", color: "#000" }}>Loading...</p>
+          ) : filteredFoods.length === 0 ? (
+            <p style={{ fontSize: "30px", color: "#000" }}>No Food Found !!!</p>
+          ) : (
+            filteredFoods.map((food) => (
+              <Link key={food.id} href={food.href || "#"} passHref>
+                <div
+                  style={{
+                    width: "300px",
+                    height: "359px",
+                    backgroundColor: "white",
+                    borderRadius: "12px",
+                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                    padding: "20px",
+                    textAlign: "center",
+                    position: "relative",
+                    marginTop: "100px",
+                  }}
+                >
                   <div
-                    className={styles["food_button"]}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleDeleteClick(food);
+                    style={{
+                      width: "194px",
+                      height: "194px",
+                      backgroundColor: "#c4c4c4",
+                      borderRadius: "50%",
+                      margin: "0 auto",
+                      marginTop: "-100px",
+                      marginBottom: "19px",
+                    }}
+                  ></div>
+                  <h1
+                    style={{
+                      fontSize: "18px",
+                      color: "#464255",
+                      margin: "30px 0 10px",
                     }}
                   >
-                    <Image
-                      src="/delete.png"
-                      alt="Delete"
-                      width={28}
-                      height={28}
-                    />
-                    <p>Delete</p>
-                  </div>
-                  <div className={styles["food_button"]}>
-                    <Image
-                      src="/dublicate.png"
-                      alt="Duplicate"
-                      width={28}
-                      height={28}
-                    />
-                    <p>Duplicate</p>
+                    {food.name}
+                  </h1>
+                  <p
+                    style={{
+                      fontSize: "14px",
+                      color: "#a3a3a3",
+                      marginTop: "30px",
+                    }}
+                  >
+                    <span style={{ fontSize: "12px", color: "#5e6" }}>
+                      Food
+                    </span>{" "}
+                    {food.category}
+                  </p>
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "8px",
+                      justifyContent: "center",
+                      marginTop: "30px",
+                    }}
+                  >
+                    {["View", "Edit", "Delete", "Duplicate"].map(
+                      (action, idx) => (
+                        <button
+                          key={idx}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            if (action === "View" || action === "Edit")
+                              handleClick(action, food.id);
+                            else if (action === "Delete")
+                              handleDeleteClick(food);
+                          }}
+                          style={{
+                            width: "60px",
+                            height: "60px",
+                            borderRadius: "12px",
+                            backgroundColor: "#f4f4f4",
+                            border: "none",
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            padding: "6px",
+                          }}
+                        >
+                          <Image
+                            src={`/${action.toLowerCase()}.png`}
+                            alt={action}
+                            width={28}
+                            height={28}
+                          />
+                          <p
+                            style={{
+                              fontSize: "12px",
+                              color: "#464255",
+                              marginTop: "4px",
+                            }}
+                          >
+                            {action}
+                          </p>
+                        </button>
+                      )
+                    )}
                   </div>
                 </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            ))
+          )}
         </div>
 
-        <Dialog
-          open={openDialog}
-          onClose={handleCloseDialog}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">Confirm Deletion</DialogTitle>
+        <Dialog open={openDialog} onClose={handleCloseDialog} fullWidth>
+          <DialogTitle>Confirm Deletion</DialogTitle>
           <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              Are you sure you want to delete the item{" "}
-              <strong>{selectedFood?.name}</strong>?
-            </DialogContentText>
+            Are you sure you want to <strong>{selectedFood?.name}</strong>?
           </DialogContent>
           <DialogActions>
             <Button onClick={handleCloseDialog}>Cancel</Button>

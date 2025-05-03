@@ -1,7 +1,7 @@
 import React from "react";
 import PageTitle from "@/components/common/PageTitle";
 import CustomerTable from "./CustomerTable";
-import styles from "@/styles/order.module.css";
+import styles from "../../../styles/order.module.css";
 import CustomerFilter from "./CustomerFilter";
 
 export default function CustomersList() {
@@ -20,7 +20,7 @@ export default function CustomersList() {
         <CustomerTable />
       </div>
       {/* <PageTitle
-        title="General Customer"
+        title="General Customer
         subtitle="Here is your general customers list data"
       />
       <CustomerTable /> */}

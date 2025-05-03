@@ -1,0 +1,247 @@
+.reviewAgain {
+  display: flex;
+  flex-wrap: wrap; /* Allow the cards to wrap */
+  justify-content: space-between; /* Ensure the cards are spaced properly */
+  padding: 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.reviewManagement {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.reviewPart {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.reviewPartRight {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.reviewPartRight button {
+  width: 293px;
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  background-color: #fff;
+  color: #3e4954;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: center;
+  margin-left: 600px;
+}
+
+.cardContainer {
+  display: flex;
+  flex-wrap: wrap; /* Allow wrapping of cards */
+  justify-content: space-between; /* Ensure space between cards */
+  gap: 20px; /* Space between rows and columns */
+}
+
+.card {
+  width: 48%; /* Adjust width to fit better on the screen */
+  height: 440px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  padding: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px; /* Space between rows */
+}
+
+.cardCircle {
+  display: flex;
+  width: 190px;
+  height: 190px;
+  background-color: #ccc;
+  border-radius: 50%;
+  left: 20px;
+  margin-top: -20px;
+}
+
+.headerLine {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.title {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.subtitle {
+  color: #00aa88;
+  font-size: 12px;
+}
+
+.text {
+  font-family: sans-serif;
+  font-size: 14px;
+  color: #464255;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.footer {
+  width: 100%; /* Ensure footer spans across the card */
+  height: 102px;
+  background-color: #2f3e59;
+  padding: 10px;
+  border-radius: 16px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.circleSm {
+  width: 54px;
+  height: 54px;
+  background-color: #c4c4c4;
+  border-radius: 50%;
+  margin-left: 35px;
+}
+
+.info {
+  flex-grow: 1;
+  margin-left: 10px;
+}
+
+.name {
+  font-family: sans-serif;
+  font-size: 18px;
+  color: #fff;
+}
+
+.role {
+  font-size: 14px;
+  color: #fff;
+  font-family: sans-serif;
+  margin-top: 5px;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.rating span {
+  font-family: sans-serif;
+  font-size: 22px;
+  color: #fff;
+  margin-right: 40px;
+}
+.reviews-container {
+  max-width: 700px;
+  margin: 20px auto;
+  background: white;
+  padding: 20px;
+  border: 3px solid #a6d5f7;
+  border-radius: 8px;
+  font-family: sans-serif;
+}
+
+.header {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.header select {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 6px;
+}
+
+.review {
+  border-top: 1px solid #ddd;
+  padding: 20px 0;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  background: #ccc;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.tags {
+  margin-bottom: 10px;
+}
+
+.tag {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+  margin-right: 5px;
+  color: white;
+}
+
+.tag.good-services,
+.tag.good-sanitize,
+.tag.food-services {
+  background-color: #4db5ff;
+}
+
+.tag.good-place,
+.tag.delicious {
+  background-color: #66bb6a;
+}
+
+.tag.excellent {
+  background-color: #ef5350;
+}
+
+.text {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.rating {
+  font-weight: bold;
+  color: #333;
+}
+
+.stars {
+  color: gold;
+  margin-left: 10px;
+}
+
+.load-more {
+  display: block;
+  margin: 20px auto 0;
+  padding: 10px 20px;
+  background: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.load-more:hover {
+  background: #1976d2;
+}
