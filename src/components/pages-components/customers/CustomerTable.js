@@ -1,5 +1,4 @@
 import React from "react";
-import styles from "@/styles/customers.module.css";
 import { useRouter } from "next/router";
 import Image from "next/image";
 
@@ -48,7 +47,14 @@ const customerData = [
 
 function SortIcons() {
   return (
-    <div className={styles.iconContainer}>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        gap: "8px",
+      }}
+    >
       <Image src="/Vector1.png" alt="Sort Ascending" width={20} height={20} />
       <Image src="/Vector2.png" alt="Sort Descending" width={20} height={20} />
     </div>
@@ -67,16 +73,37 @@ function TableMap() {
       {customerData.map((item) => (
         <tr
           key={item.userId}
-          className={styles.tr2}
-          style={{ cursor: "pointer" }}
+          style={{
+            height: "70px",
+            backgroundColor: "white",
+            cursor: "pointer",
+            borderBottom: "1px solid #ddd",
+          }}
           onClick={() => goToDetails(item.userId)}
         >
-          <td className={styles.td}>#C-{item.userId}</td>
-          <td className={styles.td}>{item.date}</td>
-          <td className={styles.td}>{item.userName}</td>
-          <td className={styles.td}>{item.location}</td>
-          <td className={styles.td1}>${item.amount}</td>
-          <td className={styles.td12}>${item.lastAmount}</td>
+          <td style={{ padding: "0 40px", textAlign: "left" }}>
+            #C-{item.userId}
+          </td>
+          <td style={{ padding: "0 40px", textAlign: "left" }}>{item.date}</td>
+          <td style={{ padding: "0 40px", textAlign: "left" }}>
+            {item.userName}
+          </td>
+          <td style={{ padding: "0 40px", textAlign: "left" }}>
+            {item.location}
+          </td>
+          <td style={{ padding: "0 40px", textAlign: "center" }}>
+            ${item.amount}
+          </td>
+          <td
+            style={{
+              padding: "0 40px",
+              backgroundColor: "#4642551a",
+              borderRadius: "15px",
+              textAlign: "center",
+            }}
+          >
+            ${item.lastAmount}
+          </td>
         </tr>
       ))}
     </>
@@ -85,29 +112,61 @@ function TableMap() {
 
 export default function CustomerTable() {
   return (
-    <table className={styles.table}>
-      <thead>
-        <tr className={styles.tr}>
-          {[
-            "Customer ID",
-            "Join Date",
-            "Customer Name",
-            "Location",
-            "Total Spent",
-            "Last Order",
-          ].map((title) => (
-            <th key={title} className={styles.th}>
-              <div>
-                <p>{title}</p>
-                <SortIcons />
-              </div>
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        <TableMap />
-      </tbody>
-    </table>
+    <div
+      style={{
+        width: "100%",
+        maxWidth: "1200px",
+        margin: "0 auto",
+        padding: "20px",
+      }}
+    >
+      <table
+        style={{
+          fontFamily: "'Barlow', sans-serif",
+          borderCollapse: "collapse",
+          width: "100%",
+          border: "1px solid #ddd",
+        }}
+      >
+        <thead>
+          <tr
+            style={{
+              height: "70px",
+              backgroundColor: "#2d9cdb",
+              color: "white",
+              textAlign: "left",
+            }}
+          >
+            {[
+              "Customer ID",
+              "Join Date",
+              "Customer Name",
+              "Location",
+              "Total Spent",
+              "Last Order",
+            ].map((title) => (
+              <th
+                key={title}
+                style={{ padding: "0 40px", fontWeight: "normal" }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                  }}
+                >
+                  <p>{title}</p>
+                  <SortIcons />
+                </div>
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          <TableMap />
+        </tbody>
+      </table>
+    </div>
   );
 }

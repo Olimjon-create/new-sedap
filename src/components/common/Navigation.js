@@ -1,98 +1,122 @@
-// components/Navigation.js
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import Image from "next/image";
-import styles from "@/styles/Aside.module.css";
+
 import {
-  IoIosHome,
-  IoIosList,
-  IoMdPeople,
-  IoMdAnalytics,
-  IoIosCalendar,
-} from "react-icons/io";
-import {
-  Assessment,
-  Comment,
-  FoodBank,
-  Person,
-  Chat,
-  Wallet,
-} from "@mui/icons-material";
+  IoHomeOutline,
+  IoReceiptOutline,
+  IoPeopleOutline,
+  IoBarChartOutline,
+  IoChatboxEllipsesOutline,
+  IoFastFoodOutline,
+  IoRestaurantOutline,
+  IoPersonCircleOutline,
+  IoCalendarOutline,
+  IoChatbubbleOutline,
+  IoWalletOutline,
+} from "react-icons/io5";
+import { FaListUl } from "react-icons/fa";
 
 function Navigation() {
+  const asideStyle = {
+    width: "349px",
+    height: "900px",
+    backgroundColor: "#ffffff",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    fontFamily: "Arial, sans-serif",
+    paddingTop: "58px",
+  };
+
+  const asideHeaderStyle = {
+    marginBottom: "58px",
+    textAlign: "center",
+    backgroundColor: "transparent",
+  };
+
+  const subtitleStyle = {
+    color: "#b9bbbd",
+    fontSize: "18px",
+    fontWeight: 400,
+  };
+
+  const buttonsMenuStyle = {
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    backgroundColor: "transparent",
+    padding: "0 20px",
+  };
+
   const links = [
-    {
-      id: 1,
-      linkName: "Dashboard",
-      linkImg: <IoIosHome />,
-      href: "/",
-    },
+    { id: 1, linkName: "Dashboard", linkImg: <IoHomeOutline />, href: "/" },
     {
       id: 2,
       linkName: "Order List",
-      linkImg: <IoIosList />,
+      linkImg: <FaListUl />,
       href: "/OrderList",
     },
     {
       id: 3,
       linkName: "Order Detail",
-      linkImg: <IoMdPeople />,
+      linkImg: <IoReceiptOutline />,
       href: "/OrderTop",
     },
     {
       id: 4,
       linkName: "Customers",
-      linkImg: <IoMdAnalytics />,
+      linkImg: <IoPeopleOutline />,
       href: "/customers",
     },
     {
       id: 5,
       linkName: "Analytics",
-      linkImg: <Assessment />,
+      linkImg: <IoBarChartOutline />,
       href: "/analis",
     },
     {
       id: 6,
       linkName: "Review",
-      linkImg: <Comment />,
-      href: "/review",
+      linkImg: <IoChatboxEllipsesOutline />,
+      href: "/ReviewsTop",
     },
     {
       id: 7,
       linkName: "Foods",
-      linkImg: <FoodBank />,
+      linkImg: <IoFastFoodOutline />,
       href: "/foods",
     },
     {
       id: 8,
       linkName: "Food Detail",
-      linkImg: <FoodBank />,
+      linkImg: <IoRestaurantOutline />,
       href: "/foodDetail",
     },
     {
       id: 9,
       linkName: "Customer Detail",
-      linkImg: <Person />,
+      linkImg: <IoPersonCircleOutline />,
       href: "/CustomerTop",
     },
     {
       id: 10,
       linkName: "Calendar",
-      linkImg: <IoIosCalendar />,
+      linkImg: <IoCalendarOutline />,
       href: "/OrderDetail",
     },
     {
       id: 11,
       linkName: "Chat",
-      linkImg: <Chat />,
+      linkImg: <IoChatbubbleOutline />,
       href: "/chat",
     },
     {
       id: 12,
       linkName: "Wallet",
-      linkImg: <Wallet />,
+      linkImg: <IoWalletOutline />,
       href: "/wallet",
     },
   ];
@@ -105,22 +129,25 @@ function Navigation() {
           href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700&display=swap"
         />
       </Head>
-      <aside className={styles["aside"]}>
-        <div className={styles["aside-header"]}>
+      <aside style={asideStyle}>
+        <div style={asideHeaderStyle}>
           <Image
             src="/Sedap.png"
             alt="Sedap Logo"
             width={167}
             height={49}
-            className={styles["logo"]}
+            style={{ backgroundColor: "transparent" }}
           />
-          <p style={{ color: "#B9BBBD", fontSize: "18px" }}>
-            Modern Admin Dashboard
-          </p>
+          <p style={subtitleStyle}>Modern Admin Dashboard</p>
         </div>
-        <div className={styles["buttonsMenu"]}>
+        <div style={buttonsMenuStyle}>
           {links.map(({ id, href, linkName, linkImg }) => (
-            <Links key={id} linkName={linkName} linkImg={linkImg} href={href} />
+            <NavLink
+              key={id}
+              linkName={linkName}
+              linkImg={linkImg}
+              href={href}
+            />
           ))}
         </div>
       </aside>
@@ -128,17 +155,56 @@ function Navigation() {
   );
 }
 
-function Links({ linkName, linkImg, href }) {
+function NavLink({ linkName, linkImg, href }) {
   const router = useRouter();
+  const isActive = router.asPath === href;
+
+  const baseStyle = {
+    textDecoration: "none",
+    color: isActive ? "#ffffff" : "#000000",
+    width: "100%",
+    height: "54px",
+    display: "flex",
+    alignItems: "center",
+    borderRadius: "8px",
+    fontWeight: 500,
+    fontSize: "16px",
+    paddingLeft: "30px",
+    position: "relative",
+    backgroundColor: isActive ? "rgba(255, 255, 255, 0.3)" : "transparent",
+    transition: "0.5s",
+  };
+
+  const iconStyle = {
+    marginRight: "20px",
+    fontSize: "20px",
+  };
+
+  const textStyle = {
+    flex: 1,
+  };
+
+  const activeBefore = isActive
+    ? {
+        content: '""',
+        display: "block",
+        width: "8px",
+        height: "100%",
+        backgroundColor: "#ffffff",
+        position: "absolute",
+        left: 0,
+        top: 0,
+        borderRadius: "4px",
+      }
+    : null;
+
   return (
-    <Link
-      className={`${router.asPath === href ? styles.active : ""} ${
-        styles.link
-      }`}
-      href={href}
-    >
-      {linkImg}
-      {linkName}
+    <Link href={href} passHref legacyBehavior>
+      <a style={baseStyle}>
+        {isActive && <span style={activeBefore}></span>}
+        <span style={iconStyle}>{linkImg}</span>
+        <span style={textStyle}>{linkName}</span>
+      </a>
     </Link>
   );
 }
