@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Head from "next/head";
@@ -22,19 +22,22 @@ import { FaListUl } from "react-icons/fa";
 function Navigation() {
   const asideStyle = {
     width: "349px",
-    height: "900px",
+    height: "100vh",
     backgroundColor: "#ffffff",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     fontFamily: "Arial, sans-serif",
     paddingTop: "58px",
+    position: "fixed",
+    top: 0,
+    left: 0,
+    zIndex: 1000,
   };
 
   const asideHeaderStyle = {
     marginBottom: "58px",
     textAlign: "center",
-    backgroundColor: "transparent",
   };
 
   const subtitleStyle = {
@@ -47,7 +50,6 @@ function Navigation() {
     width: "100%",
     display: "flex",
     flexDirection: "column",
-    backgroundColor: "transparent",
     padding: "0 20px",
   };
 
@@ -131,13 +133,7 @@ function Navigation() {
       </Head>
       <aside style={asideStyle}>
         <div style={asideHeaderStyle}>
-          <Image
-            src="/Sedap.png"
-            alt="Sedap Logo"
-            width={167}
-            height={49}
-            style={{ backgroundColor: "transparent" }}
-          />
+          <Image src="/Sedap.png" alt="Sedap Logo" width={167} height={49} />
           <p style={subtitleStyle}>Modern Admin Dashboard</p>
         </div>
         <div style={buttonsMenuStyle}>
@@ -158,10 +154,11 @@ function Navigation() {
 function NavLink({ linkName, linkImg, href }) {
   const router = useRouter();
   const isActive = router.asPath === href;
+  const [isHovered, setIsHovered] = useState(false);
 
   const baseStyle = {
     textDecoration: "none",
-    color: isActive ? "#ffffff" : "#000000",
+    color: "#000",
     width: "100%",
     height: "54px",
     display: "flex",
@@ -171,8 +168,13 @@ function NavLink({ linkName, linkImg, href }) {
     fontSize: "16px",
     paddingLeft: "30px",
     position: "relative",
-    backgroundColor: isActive ? "rgba(255, 255, 255, 0.3)" : "transparent",
-    transition: "0.5s",
+    backgroundColor: isActive
+      ? "rgba(255, 255, 255, 0.3)"
+      : isHovered
+      ? "#00B074"
+      : "transparent",
+    transition: "0.3s ease",
+    cursor: "pointer",
   };
 
   const iconStyle = {
@@ -184,23 +186,25 @@ function NavLink({ linkName, linkImg, href }) {
     flex: 1,
   };
 
-  const activeBefore = isActive
-    ? {
-        content: '""',
-        display: "block",
-        width: "8px",
-        height: "100%",
-        backgroundColor: "#ffffff",
-        position: "absolute",
-        left: 0,
-        top: 0,
-        borderRadius: "4px",
-      }
-    : null;
+  const activeBefore = {
+    content: '""',
+    display: "block",
+    width: "8px",
+    height: "100%",
+    backgroundColor: "#ffffff",
+    position: "absolute",
+    left: 0,
+    top: 0,
+    borderRadius: "4px",
+  };
 
   return (
     <Link href={href} passHref legacyBehavior>
-      <a style={baseStyle}>
+      <a
+        style={baseStyle}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         {isActive && <span style={activeBefore}></span>}
         <span style={iconStyle}>{linkImg}</span>
         <span style={textStyle}>{linkName}</span>

@@ -12,15 +12,25 @@ import {
 } from "@mui/material";
 import useFetchApiItems from "@/hooks/useFetchApilItems";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 function FoodForm({ title, food, btnText }) {
+  const router = useRouter();
   const [isSnackOpen, setIsSnackOpen] = useState(false);
   const [formData, setFormData] = useState(null);
   const [category, setCategory] = useState("");
 
   useEffect(() => {
     if (food) {
-      setFormData(food);
+      setFormData({
+        documentId: food.documentId ?? null,
+        name: food.name,
+        image: food.image,
+        type: food.type?.documentId,
+        price: food.price,
+        comment: food.comment,
+      });
+      setCategory(food.type?.category?.documentId);
     } else {
       setFormData(foodInitialValues);
     }
@@ -45,26 +55,49 @@ function FoodForm({ title, food, btnText }) {
 
     const values = {
       data: {
-        name: formData.name ?? "test",
-        price: formData.price ?? "1000",
-        comment: formData.comment ?? "q34",
+        name: formData.name,
+        image: formData.image,
+        price: formData.price,
+        comment: formData.comment,
         type: {
           connect: [formData.type],
         },
       },
     };
 
-    const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(values),
-    };
-    fetch("http://localhost:1337/api/foods", options)
-      .then((response) => response.json())
-      .then((data) => console.log(data))
-      .catch((error) => console.error(error));
+    if (formData.documentId) {
+      // update
+      const options = {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      };
+      fetch(`http://localhost:1337/api/foods/${formData.documentId}`, options)
+        .then((response) => response.json())
+        .then((res) => {
+          console.log(res);
+          router.push(`/foods/${res.data.documentId}`);
+        })
+        .catch((error) => console.error(error));
+    } else {
+      // create
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      };
+      fetch("http://localhost:1337/api/foods", options)
+        .then((response) => response.json())
+        .then((res) => {
+          console.log(res);
+          router.push(`/foods/${res.data.documentId}`);
+        })
+        .catch((error) => console.error(error));
+    }
   };
 
   console.log("category", category);
@@ -98,6 +131,7 @@ function FoodForm({ title, food, btnText }) {
       </h1>
       <form onSubmit={handleSubmit}>
         <Grid container spacing={2}>
+          {/* Name */}
           <Grid item size={6}>
             <TextField
               fullWidth
@@ -125,6 +159,7 @@ function FoodForm({ title, food, btnText }) {
             />
           </Grid>
 
+          {/* Category */}
           <Grid item size={6}>
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Category</InputLabel>
@@ -144,6 +179,7 @@ function FoodForm({ title, food, btnText }) {
             </FormControl>
           </Grid>
 
+          {/* Type */}
           <Grid item size={6}>
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Type</InputLabel>
@@ -170,6 +206,7 @@ function FoodForm({ title, food, btnText }) {
             </FormControl>
           </Grid>
 
+          {/* Price */}
           <Grid item size={6}>
             <TextField
               fullWidth
@@ -198,6 +235,35 @@ function FoodForm({ title, food, btnText }) {
             />
           </Grid>
 
+          {/* image field */}
+          <Grid item size={12}>
+            <TextField
+              fullWidth
+              label="Image"
+              variant="outlined"
+              name="image"
+              value={formData.image}
+              onChange={handleChange}
+              sx={{
+                "& .MuiInputLabel-root": {
+                  color: "#00B074",
+                },
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: "#00B074",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "#00B074",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#00B074",
+                  },
+                },
+              }}
+            />
+          </Grid>
+
+          {/* Comment */}
           <Grid item size={12}>
             <TextField
               fullWidth
@@ -227,6 +293,7 @@ function FoodForm({ title, food, btnText }) {
             />
           </Grid>
 
+          {/* Submit Button */}
           <Grid item xs={12}>
             <Button
               type="submit"
@@ -258,7 +325,9 @@ function FoodForm({ title, food, btnText }) {
 export default FoodForm;
 
 const foodInitialValues = {
+  documentId: null,
   name: "",
+  image: "",
   type: "",
   price: "",
   comment: "",

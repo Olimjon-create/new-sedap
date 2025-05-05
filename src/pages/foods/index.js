@@ -7,15 +7,32 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 import { useRouter } from "next/router";
+
 import MainLayout from "@/components/common/layouts/MainLayout";
 import useFetchApiItems from "@/hooks/useFetchApilItems";
+
 export default function New() {
   const [foods, setFoods] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedFood, setSelectedFood] = useState(null);
   const [inputValue, setInputValue] = useState("");
   const router = useRouter();
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+
+  const showSnackbar = (message) => {
+    setSnackbarMessage(message);
+    setSnackbarOpen(true);
+  };
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") return;
+    setSnackbarOpen(false);
+  };
 
   const [items, isLoading] = useFetchApiItems(
     "/foods?populate[type][populate][0]=category"
@@ -50,6 +67,7 @@ export default function New() {
       prevFoods.filter((food) => food.id !== selectedFood.id)
     );
     setOpenDialog(false);
+    showSnackbar(`${selectedFood.name} deleted successfully`);
     setSelectedFood(null);
   };
 
@@ -298,7 +316,8 @@ export default function New() {
         <Dialog open={openDialog} onClose={handleCloseDialog} fullWidth>
           <DialogTitle>Confirm Deletion</DialogTitle>
           <DialogContent>
-            Are you sure you want to <strong>{selectedFood?.name}</strong>?
+            Are you sure you want to delete{" "}
+            <strong>{selectedFood?.name}</strong>?
           </DialogContent>
           <DialogActions>
             <Button onClick={handleCloseDialog}>Cancel</Button>
@@ -307,6 +326,23 @@ export default function New() {
             </Button>
           </DialogActions>
         </Dialog>
+
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={3000}
+          onClose={handleSnackbarClose}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        >
+          <MuiAlert
+            onClose={handleSnackbarClose}
+            severity="success"
+            elevation={6}
+            variant="filled"
+            sx={{ width: "100%" }}
+          >
+            {snackbarMessage}
+          </MuiAlert>
+        </Snackbar>
       </div>
     </>
   );
