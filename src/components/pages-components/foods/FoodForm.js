@@ -66,7 +66,6 @@ function FoodForm({ title, food, btnText }) {
     };
 
     if (formData.documentId) {
-      // update
       const options = {
         method: "PUT",
         headers: {
@@ -74,7 +73,10 @@ function FoodForm({ title, food, btnText }) {
         },
         body: JSON.stringify(values),
       };
-      fetch(`http://localhost:1337/api/foods/${formData.documentId}`, options)
+      fetch(
+        `http://192.168.100.108:1337/api/foods/${formData.documentId}`,
+        options
+      )
         .then((response) => response.json())
         .then((res) => {
           console.log(res);
@@ -82,7 +84,6 @@ function FoodForm({ title, food, btnText }) {
         })
         .catch((error) => console.error(error));
     } else {
-      // create
       const options = {
         method: "POST",
         headers: {
@@ -90,7 +91,7 @@ function FoodForm({ title, food, btnText }) {
         },
         body: JSON.stringify(values),
       };
-      fetch("http://localhost:1337/api/foods", options)
+      fetch("http://192.168.100.108:1337/api/foods", options)
         .then((response) => response.json())
         .then((res) => {
           console.log(res);
@@ -131,7 +132,6 @@ function FoodForm({ title, food, btnText }) {
       </h1>
       <form onSubmit={handleSubmit}>
         <Grid container spacing={2}>
-          {/* Name */}
           <Grid item size={6}>
             <TextField
               fullWidth
@@ -159,7 +159,6 @@ function FoodForm({ title, food, btnText }) {
             />
           </Grid>
 
-          {/* Category */}
           <Grid item size={6}>
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Category</InputLabel>
@@ -179,7 +178,6 @@ function FoodForm({ title, food, btnText }) {
             </FormControl>
           </Grid>
 
-          {/* Type */}
           <Grid item size={6}>
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Type</InputLabel>
@@ -206,7 +204,6 @@ function FoodForm({ title, food, btnText }) {
             </FormControl>
           </Grid>
 
-          {/* Price */}
           <Grid item size={6}>
             <TextField
               fullWidth
@@ -235,7 +232,6 @@ function FoodForm({ title, food, btnText }) {
             />
           </Grid>
 
-          {/* image field */}
           <Grid item size={12}>
             <TextField
               fullWidth
@@ -263,7 +259,6 @@ function FoodForm({ title, food, btnText }) {
             />
           </Grid>
 
-          {/* Comment */}
           <Grid item size={12}>
             <TextField
               fullWidth
@@ -293,7 +288,6 @@ function FoodForm({ title, food, btnText }) {
             />
           </Grid>
 
-          {/* Submit Button */}
           <Grid item xs={12}>
             <Button
               type="submit"

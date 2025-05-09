@@ -22,22 +22,19 @@ import { FaListUl } from "react-icons/fa";
 function Navigation() {
   const asideStyle = {
     width: "349px",
-    height: "100vh",
+    height: "900px",
     backgroundColor: "#ffffff",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     fontFamily: "Arial, sans-serif",
     paddingTop: "58px",
-    position: "fixed",
-    top: 0,
-    left: 0,
-    zIndex: 1000,
   };
 
   const asideHeaderStyle = {
     marginBottom: "58px",
     textAlign: "center",
+    backgroundColor: "transparent",
   };
 
   const subtitleStyle = {
@@ -50,6 +47,7 @@ function Navigation() {
     width: "100%",
     display: "flex",
     flexDirection: "column",
+    backgroundColor: "transparent",
     padding: "0 20px",
   };
 
@@ -133,7 +131,13 @@ function Navigation() {
       </Head>
       <aside style={asideStyle}>
         <div style={asideHeaderStyle}>
-          <Image src="/Sedap.png" alt="Sedap Logo" width={167} height={49} />
+          <Image
+            src="/Sedap.png"
+            alt="Sedap Logo"
+            width={167}
+            height={49}
+            style={{ backgroundColor: "transparent" }}
+          />
           <p style={subtitleStyle}>Modern Admin Dashboard</p>
         </div>
         <div style={buttonsMenuStyle}>
@@ -174,7 +178,7 @@ function NavLink({ linkName, linkImg, href }) {
       ? "#00B074"
       : "transparent",
     transition: "0.3s ease",
-    cursor: "pointer",
+    cursor: isHovered ? "pointer" : "default",
   };
 
   const iconStyle = {

@@ -10,32 +10,21 @@ import Button from "@mui/material/Button";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { useRouter } from "next/router";
-
 import MainLayout from "@/components/common/layouts/MainLayout";
 import useFetchApiItems from "@/hooks/useFetchApilItems";
+import FoodDetailComponent from "@/components/pages-components/foods/FoodDetailComponent";
 
 export default function New() {
   const [foods, setFoods] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedFood, setSelectedFood] = useState(null);
   const [inputValue, setInputValue] = useState("");
-  const router = useRouter();
-
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-
-  const showSnackbar = (message) => {
-    setSnackbarMessage(message);
-    setSnackbarOpen(true);
-  };
-
-  const handleSnackbarClose = (event, reason) => {
-    if (reason === "clickaway") return;
-    setSnackbarOpen(false);
-  };
+  const router = useRouter();
 
   const [items, isLoading] = useFetchApiItems(
-    "/foods?populate[type][populate][0]=category"
+    `/foods/${router.query.documentId}?populate[type][populate][0]=category`
   );
 
   useEffect(() => {
@@ -51,6 +40,16 @@ export default function New() {
         food.category.toLowerCase().includes(inputValue.toLowerCase())
     );
   }, [inputValue, foods]);
+
+  const showSnackbar = (message) => {
+    setSnackbarMessage(message);
+    setSnackbarOpen(true);
+  };
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") return;
+    setSnackbarOpen(false);
+  };
 
   const handleDeleteClick = (food) => {
     setSelectedFood(food);
@@ -210,7 +209,7 @@ export default function New() {
             <p style={{ fontSize: "30px", color: "#000" }}>No Food Found !!!</p>
           ) : (
             filteredFoods.map((food) => (
-              <Link key={food.id} href={food.href || "#"} passHref>
+              <Link key={food} href={food.href || "#"} passHref>
                 <div
                   style={{
                     width: "300px",
@@ -271,7 +270,7 @@ export default function New() {
                           onClick={(e) => {
                             e.preventDefault();
                             if (action === "View" || action === "Edit")
-                              handleClick(action, food.id);
+                              handleClick(action, food.documentId);
                             else if (action === "Delete")
                               handleDeleteClick(food);
                           }}
@@ -279,6 +278,7 @@ export default function New() {
                             width: "60px",
                             height: "60px",
                             borderRadius: "12px",
+                            backgroundColor: "#fff",
                             backgroundColor: "#f4f4f4",
                             border: "none",
                             display: "flex",
@@ -343,6 +343,16 @@ export default function New() {
             {snackbarMessage}
           </MuiAlert>
         </Snackbar>
+
+        <div style={{ marginTop: "40px" }}>
+          {selectedFood ? (
+            <FoodDetailComponent data={selectedFood} />
+          ) : (
+            <p
+              style={{ textAlign: "center", fontSize: "18px", color: "#999" }}
+            ></p>
+          )}
+        </div>
       </div>
     </>
   );
