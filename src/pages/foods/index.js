@@ -15,30 +15,33 @@ import useFetchApiItems from "@/hooks/useFetchApilItems";
 import FoodDetailComponent from "@/components/pages-components/foods/FoodDetailComponent";
 
 export default function New() {
-  const [foods, setFoods] = useState([]);
+  const router = useRouter();
+  const id = router.query.documentId;
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedFood, setSelectedFood] = useState(null);
   const [inputValue, setInputValue] = useState("");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-  const router = useRouter();
+  const [foods, setFoods] = useState([]);
 
-  const [items, isLoading] = useFetchApiItems(
-    `/foods/${router.query.documentId}?populate[type][populate][0]=category`
+  const [fetchedFoods, isLoading, refetch] = useFetchApiItems(
+    "/foods?populate[type][populate][0]=category"
   );
 
   useEffect(() => {
-    if (items && Array.isArray(items)) {
-      setFoods(items);
+    if (fetchedFoods) {
+      setFoods(fetchedFoods);
     }
-  }, [items]);
+  }, [fetchedFoods]);
 
   const filteredFoods = useMemo(() => {
-    return foods.filter(
-      (food) =>
-        food.name.toLowerCase().includes(inputValue.toLowerCase()) ||
-        food.category.toLowerCase().includes(inputValue.toLowerCase())
-    );
+    return foods.filter((food) => {
+      const name = food.name ? food.name.toLowerCase() : "";
+      const category = food.category ? food.category.toLowerCase() : "";
+      const input = inputValue.toLowerCase();
+
+      return name.includes(input) || category.includes(input);
+    });
   }, [inputValue, foods]);
 
   const showSnackbar = (message) => {
@@ -209,7 +212,7 @@ export default function New() {
             <p style={{ fontSize: "30px", color: "#000" }}>No Food Found !!!</p>
           ) : (
             filteredFoods.map((food) => (
-              <Link key={food} href={food.href || "#"} passHref>
+              <Link key={food.id} href={food.href || "#"} passHref>
                 <div
                   style={{
                     width: "300px",

@@ -132,6 +132,7 @@ function OrderDetail() {
               }}
             >
               Hello, Samantha
+              <button>LogOut</button>
             </p>
           </div>
         </div>
