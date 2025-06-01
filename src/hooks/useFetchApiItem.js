@@ -5,7 +5,7 @@ function useFetchApiItem(path) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://192.168.100.108:1337/api${path}`, {
+    fetch(`http://192.168.100.113:1337/api${path}`, {
       method: "GET",
     })
       .then((response) => response.json())

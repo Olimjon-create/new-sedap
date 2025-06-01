@@ -1,4 +1,4 @@
-import React, { use, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TextField,
   Button,
@@ -11,47 +11,60 @@ import {
   Snackbar,
 } from "@mui/material";
 import useFetchApiItems from "@/hooks/useFetchApilItems";
-import { useState } from "react";
 import { useRouter } from "next/router";
+import useCurrentUser from "@/hooks/useCurrentUser";
+
+const foodInitialValues = {
+  documentId: null,
+  name: "",
+  image: "",
+  type: "",
+  price: "",
+  comment: "",
+};
 
 function FoodForm({ title, food, btnText }) {
   const router = useRouter();
   const [isSnackOpen, setIsSnackOpen] = useState(false);
-  const [formData, setFormData] = useState(null);
+  const [formData, setFormData] = useState(foodInitialValues);
   const [category, setCategory] = useState("");
+  const user = useCurrentUser();
 
+  // Initial load
   useEffect(() => {
     if (food) {
       setFormData({
         documentId: food.documentId ?? null,
-        name: food.name,
-        image: food.image,
-        type: food.type?.documentId,
-        price: food.price,
-        comment: food.comment,
+        name: food.name ?? "",
+        image: food.image ?? "",
+        type: food.type?.documentId ?? "",
+        price: food.price ?? "",
+        comment: food.comment ?? "",
       });
-      setCategory(food.type?.category?.documentId);
+      setCategory(food.type?.category?.documentId ?? "");
     } else {
       setFormData(foodInitialValues);
+      setCategory("");
     }
   }, [food]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const [categories, isLoading] = useFetchApiItems("/categories");
-  const [types, typesLoading] = useFetchApiItems(
-    `/types?filters[category][documentId][$eq]=${category}`
+  const [categories = [], isLoading] = useFetchApiItems(
+    user?.restaurant?.documentId
+      ? `/categories?filters[restaurant][documentId][$eq]=${user.restaurant.documentId}`
+      : null
+  );
+
+  const [types = [], typesLoading] = useFetchApiItems(
+    category ? `/types?filters[category][documentId][$eq]=${category}` : null
   );
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Submitted", formData);
 
     const values = {
       data: {
@@ -62,52 +75,40 @@ function FoodForm({ title, food, btnText }) {
         type: {
           connect: [formData.type],
         },
+        restaurant: user?.restaurant?.documentId ?? null,
       },
     };
 
-    if (formData.documentId) {
-      const options = {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      };
-      fetch(
-        `http://192.168.100.108:1337/api/foods/${formData.documentId}`,
-        options
-      )
-        .then((response) => response.json())
-        .then((res) => {
-          console.log(res);
-          router.push(`/foods/${res.data.documentId}`);
-        })
-        .catch((error) => console.error(error));
-    } else {
-      const options = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      };
-      fetch("http://192.168.100.108:1337/api/foods", options)
-        .then((response) => response.json())
-        .then((res) => {
-          console.log(res);
-          router.push(`/foods/${res.data.documentId}`);
-        })
-        .catch((error) => console.error(error));
+    const isUpdate = !!formData.documentId;
+    const method = isUpdate ? "PUT" : "POST";
+    const url = isUpdate
+      ? `http://192.168.100.113:1337/api/foods/${formData.documentId}`
+      : `http://192.168.100.113:1337/api/foods`;
+
+    if (!values.data.restaurant || !formData.type) {
+      alert("Category va Type tanlanishi kerak");
+      return;
     }
+
+    fetch(url, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        if (res?.data?.documentId) {
+          setIsSnackOpen(true);
+          router.push(`/foods/${res.data.documentId}`);
+        }
+      })
+      .catch((error) => console.error(error));
   };
 
-  console.log("category", category);
-
-  if (!formData) {
-    return null;
-  }
-
-  console.log("hey", formData);
+  if (!formData) return null;
 
   return (
     <Box
@@ -122,49 +123,26 @@ function FoodForm({ title, food, btnText }) {
         marginTop: "30px",
       }}
     >
-      <h1
-        style={{
-          color: "#00B074",
-          marginBottom: "30px",
-        }}
-      >
-        {title}
-      </h1>
+      <h1 style={{ color: "#00B074", marginBottom: "30px" }}>{title}</h1>
+
       <form onSubmit={handleSubmit}>
         <Grid container spacing={2}>
-          <Grid item size={6}>
+          {/* Name */}
+          <Grid item xs={6}>
             <TextField
               fullWidth
               label="Name"
-              variant="outlined"
               name="name"
               value={formData.name}
               onChange={handleChange}
-              sx={{
-                "& .MuiInputLabel-root": {
-                  color: "#00B074",
-                },
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: "#00B074",
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "#00B074",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "#00B074",
-                  },
-                },
-              }}
             />
           </Grid>
 
-          <Grid item size={6}>
+          {/* Category */}
+          <Grid item xs={6}>
             <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Category</InputLabel>
+              <InputLabel>Category</InputLabel>
               <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
                 value={category}
                 label="Category"
                 onChange={(e) => setCategory(e.target.value)}
@@ -178,24 +156,20 @@ function FoodForm({ title, food, btnText }) {
             </FormControl>
           </Grid>
 
-          <Grid item size={6}>
+          {/* Type */}
+          <Grid item xs={6}>
             <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Type</InputLabel>
+              <InputLabel>Type</InputLabel>
               <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
                 value={formData.type}
                 label="Type"
-                onChange={(e) => {
+                onChange={(e) =>
                   handleChange({
-                    target: {
-                      name: "type",
-                      value: e.target.value,
-                    },
-                  });
-                }}
+                    target: { name: "type", value: e.target.value },
+                  })
+                }
               >
-                {[...(types ?? [])].map((type) => (
+                {types.map((type) => (
                   <MenuItem key={type.id} value={type.documentId}>
                     {type.name}
                   </MenuItem>
@@ -204,90 +178,43 @@ function FoodForm({ title, food, btnText }) {
             </FormControl>
           </Grid>
 
-          <Grid item size={6}>
+          {/* Price */}
+          <Grid item xs={6}>
             <TextField
               fullWidth
               label="Price"
-              variant="outlined"
               name="price"
+              type="number"
               value={formData.price}
               onChange={handleChange}
-              type="number"
-              sx={{
-                "& .MuiInputLabel-root": {
-                  color: "#00B074",
-                },
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: "#00B074",
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "#00B074",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "#00B074",
-                  },
-                },
-              }}
             />
           </Grid>
 
-          <Grid item size={12}>
+          {/* Image */}
+          <Grid item xs={12}>
             <TextField
               fullWidth
-              label="Image"
-              variant="outlined"
+              label="Image URL"
               name="image"
               value={formData.image}
               onChange={handleChange}
-              sx={{
-                "& .MuiInputLabel-root": {
-                  color: "#00B074",
-                },
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: "#00B074",
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "#00B074",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "#00B074",
-                  },
-                },
-              }}
             />
           </Grid>
 
-          <Grid item size={12}>
+          {/* Comment */}
+          <Grid item xs={12}>
             <TextField
               fullWidth
               label="Comment"
-              variant="outlined"
               name="comment"
               value={formData.comment}
               onChange={handleChange}
               multiline
               rows={4}
-              sx={{
-                "& .MuiInputLabel-root": {
-                  color: "#00B074",
-                },
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: "#00B074",
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "#00B074",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "#00B074",
-                  },
-                },
-              }}
             />
           </Grid>
 
+          {/* Submit */}
           <Grid item xs={12}>
             <Button
               type="submit"
@@ -306,23 +233,15 @@ function FoodForm({ title, food, btnText }) {
           </Grid>
         </Grid>
       </form>
+
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={isSnackOpen}
         onClose={() => setIsSnackOpen(false)}
-        message="Food is created"
+        message="Food successfully saved"
       />
     </Box>
   );
 }
 
 export default FoodForm;
-
-const foodInitialValues = {
-  documentId: null,
-  name: "",
-  image: "",
-  type: "",
-  price: "",
-  comment: "",
-};

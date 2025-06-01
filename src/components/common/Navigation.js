@@ -91,6 +91,18 @@ function Navigation() {
     },
     {
       id: 8,
+      linkName: "Categories",
+      linkImg: <IoFastFoodOutline />,
+      href: "/categories",
+    },
+    {
+      id: 9,
+      linkName: "Types",
+      linkImg: <IoFastFoodOutline />,
+      href: "/types",
+    },
+    {
+      id: 8,
       linkName: "Food Detail",
       linkImg: <IoRestaurantOutline />,
       href: "/foodDetail",

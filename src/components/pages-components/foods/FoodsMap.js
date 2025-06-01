@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import CustomBtnFood from "@/components/pages/foods/CustomBtnFood";
+
 import { useRouter } from "next/router";
 import Image from "next/image";
 import {
@@ -20,7 +20,7 @@ function FoodsMap({ selected, data, refetch }) {
 
   const handleDelete = (foodId) => {
     if (foodId) {
-      fetch(`http://192.168.100.108:1337/api/foods/${foodId}`, {
+      fetch(`http://192.168.100.113:1337/api/foods/${foodId}`, {
         method: "DELETE",
       })
         .then((res) => {

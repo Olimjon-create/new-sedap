@@ -1,5 +1,4 @@
 import React from "react";
-import Variants from "@/components/pages/foods/Skeleton";
 
 function FoodMapSkeleton() {
   return (

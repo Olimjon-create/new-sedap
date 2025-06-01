@@ -5,7 +5,7 @@ export default async function signIn(param, data) {
   try {
     // Request API.
     const data = await axios
-      .post("http://192.168.100.108:1337/api/auth/local", {
+      .post("http://192.168.100.113:1337/api/auth/local", {
         identifier: email,
         password: password,
       })

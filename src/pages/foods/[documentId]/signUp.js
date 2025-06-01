@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-
+import Box from "@mui/material/Box";
 export default function SignUpForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -46,7 +46,7 @@ export default function SignUpForm() {
   };
 
   return (
-    <div
+    <Box
       style={{
         maxWidth: "400px",
         margin: "100px auto",
@@ -135,6 +135,6 @@ export default function SignUpForm() {
           {success}
         </p>
       )}
-    </div>
+    </Box>
   );
 }
