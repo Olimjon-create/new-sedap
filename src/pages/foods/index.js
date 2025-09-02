@@ -1,179 +1,124 @@
-import React, { useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
 import Head from "next/head";
+import React, { useEffect, useState } from "react";
 import MainLayout from "@/components/common/layouts/MainLayout";
-import styles from "../../styles/foods.module.css";
+import PageTitle from "@/components/common/PageTitle";
 
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import Button from "@mui/material/Button";
-import DialogContentText from "@mui/material/DialogContentText";
+import FoodsMap from "@/components/pages-components/foods/FoodsMap";
+import FoodMapSkeleton from "@/components/pages-components/foods/FoodMapSkeleton";
+import FoodSearch from "@/components/pages-components/foods/FoodSearch";
+import FoodBtn from "@/components/pages-components/foods/FoodBtn";
+import NewBtn from "@/components/pages-components/foods/NewBtn";
+import useFetchApiItems from "@/hooks/useFetchApilItems";
 
-const initialFoods = [
-  {
-    id: 1,
-    name: "Spicy Mozarella with Barbeque",
-    category: "Food / Noodle",
-    href: "#",
-  },
-  {
-    id: 2,
-    name: "Burger Jumbo Special With Spicy",
-    category: "Food / Burger",
-    href: "#",
-  },
-  {
-    id: 3,
-    name: "Pizza la Piazza Special Nuggets",
-    category: "Food / Pizza",
-    href: "#",
-  },
-  {
-    id: 4,
-    name: "Pizza la Piazza Special Nuggets",
-    category: "Food / Pizza",
-    href: "#",
-  },
-  {
-    id: 5,
-    name: "Pizza la Piazza Special Nuggets",
-    category: "Food / Pizza",
-    href: "#",
-  },
-  {
-    id: 6,
-    name: "Pizza la Piazza Special Nuggets",
-    category: "Food / Pizza",
-    href: "#",
-  },
-];
+export default function Foods() {
+  const [searchValue, setSearchValue] = useState("");
+  const [filteredFoods, setFilteredFoods] = useState([]);
+  const [selected, setSelected] = useState("left");
 
-export default function New() {
-  const [foods, setFoods] = useState(initialFoods);
-  const [openDialog, setOpenDialog] = useState(false);
-  const [selectedFood, setSelectedFood] = useState(null);
+  const [user, setUser] = useState(null);
 
-  const handleDeleteClick = (food) => {
-    setSelectedFood(food);
-    setOpenDialog(true);
-  };
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedUser = localStorage.getItem("user");
+      let parsedUser = null;
 
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
-    setSelectedFood(null);
-  };
+      try {
+        if (storedUser && storedUser !== "undefined") {
+          parsedUser = JSON.parse(storedUser);
+        }
+      } catch (error) {
+        console.error("Failed to parse user from localStorage:", error);
+      }
 
-  const handleConfirmDelete = () => {
-    setFoods((prevFoods) =>
-      prevFoods.filter((food) => food.id !== selectedFood.id)
-    );
-    setOpenDialog(false);
-    setSelectedFood(null);
-  };
+      setUser(parsedUser);
+    }
+  }, []);
+
+  // Fetch restaurants for the current user
+  const [restaurants, isResLoading, refetchRes] = useFetchApiItems(
+    user
+      ? `/restaurants?filters[users][documentId][$eqi]=${user.documentId}`
+      : null
+  );
+
+  const foundRestaurant = restaurants?.[0] ?? null;
+
+  // Fetch foods for the found restaurant
+  const [foods, isLoading, refetchFoods] = useFetchApiItems(
+    foundRestaurant
+      ? `/foods?filters[restaurant][documentId][$eq]=${foundRestaurant.documentId}&populate[type][populate]=category`
+      : null
+  );
+
+  // Filter foods based on searchValue
+  useEffect(() => {
+    if (foods && searchValue.trim() !== "") {
+      const filtered = foods.filter((item) =>
+        item.name.toLowerCase().includes(searchValue.toLowerCase())
+      );
+      setFilteredFoods(filtered);
+    } else {
+      setFilteredFoods([]);
+    }
+  }, [searchValue, foods]);
+
+  // Refetch foods when restaurant changes
+  useEffect(() => {
+    if (refetchFoods) {
+      refetchFoods();
+    }
+  }, [foundRestaurant, refetchFoods]);
 
   return (
     <>
       <Head>
-        <title>Foods List</title>
-        <meta name="description" content="Manage your food items" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        <title>Foods</title>
       </Head>
-
       <div>
-        <div className={styles.live}>
-          <div className={styles.inputCustomerSearch}></div>
-          <div className="colum">
-            <h1 className={styles.text8}>Foods</h1>
-            <p className={styles.text9}>
-              Here is your menus summary with graph view
-            </p>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <PageTitle
+            title="Foods"
+            subtitle="Here is your menus summary with graph view"
+          />
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "26px",
+            }}
+          >
+            <FoodSearch onChange={setSearchValue} />
+            <FoodBtn selected={selected} onSelect={setSelected} />
+            <NewBtn />
           </div>
         </div>
 
-        <div className={styles["food-cards"]}>
-          {foods.map((food) => (
-            <Link key={food.id} href={food.href || "#"} passHref>
-              <div className={styles["card_button"]}>
-                <div className={styles["radius_button"]}></div>
-                <h1 className={styles["text_5"]}>{food.name}</h1>
-                <p className={styles["text_6"]}>
-                  <span className={styles["text_7"]}>Food</span> {food.category}
-                </p>
-                <div className={styles["ddd"]}>
-                  <div className={styles["food_button"]}>
-                    <Image src="/view.png" alt="View" width={28} height={28} />
-                    <p>views</p>
-                  </div>
-                  <div className={styles["food_button"]}>
-                    <Image
-                      src="/stories.png"
-                      alt="Edit"
-                      width={28}
-                      height={28}
-                    />
-                    <p>Edit</p>
-                  </div>
-                  <div
-                    className={styles["food_button"]}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleDeleteClick(food);
-                    }}
-                  >
-                    <Image
-                      src="/delete.png"
-                      alt="Delete"
-                      width={28}
-                      height={28}
-                    />
-                    <p>Delete</p>
-                  </div>
-                  <div className={styles["food_button"]}>
-                    <Image
-                      src="/dublicate.png"
-                      alt="Duplicate"
-                      width={28}
-                      height={28}
-                    />
-                    <p>Duplicate</p>
-                  </div>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-
-        <Dialog
-          open={openDialog}
-          onClose={handleCloseDialog}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">Confirm Deletion</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              Are you sure you want to delete the item{" "}
-              <strong>{selectedFood?.name}</strong>?
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCloseDialog}>Cancel</Button>
-            <Button onClick={handleConfirmDelete} color="error">
-              Delete
-            </Button>
-          </DialogActions>
-        </Dialog>
+        {!isLoading && foundRestaurant ? (
+          searchValue.length > 0 ? (
+            filteredFoods.length > 0 ? (
+              <FoodsMap data={filteredFoods} />
+            ) : (
+              <h1 style={{ textAlign: "center" }}>Food topilmadi!</h1>
+            )
+          ) : (
+            <FoodsMap data={foods} refetch={refetchFoods} selected={selected} />
+          )
+        ) : (
+          <FoodMapSkeleton count={3} />
+        )}
       </div>
     </>
   );
 }
 
-New.getLayout = (pageProps) => (
+Foods.getLayout = (pageProps) => (
   <MainLayout>
-    <New {...pageProps} />
+    <Foods {...pageProps} />
   </MainLayout>
 );

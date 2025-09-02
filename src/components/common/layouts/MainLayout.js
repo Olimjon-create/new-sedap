@@ -1,33 +1,45 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import Navigation from "../Navigation";
 import { useRouter } from "next/router";
-
+import Search from "./Search";
+import Box from "@mui/material/Box";
 function MainLayout(props) {
   const router = useRouter();
-  const date = new Date().getDate();
-  const month = new Date().getMonth();
-  const year = new Date().getFullYear();
+
+  // useEffect(() => {
+  //   if (typeof window !== "undefined") {
+  //     const testUser = localStorage.getItem("user");
+  //     if (!testUser) {
+  //       // router.push("/auth/login");
+  //     }
+  //   }
+  // }, [router]);
+
   return (
     <main
       style={{
         display: "flex",
+        maxWidth: "1920px",
+        width: "100%",
+        margin: "0 auto",
         minHeight: "100vh",
-        minWidth: "100vw",
+        // minWidth: "100vw",
       }}
     >
-      <div style={{ display: "flex", minWidth: "100wh" }}>
+      <Box style={{ display: "flex", minWidth: "100wh" }}>
         <Navigation />
-        {/* <h1 style={{ display: router.asPath === "/" ? "block" : "none" }}>
-        </h1> */}
-        <div style={{ display: router.asPath === "/" ? "block" : "none" }}>
-          <h1 style={{ marginLeft: "20px" }}>Olimjon </h1>
-          <h1 style={{ marginLeft: "20px" }}>
-            {[date, "-", month, "-", year]}
-          </h1>
-        </div>
-      </div>
-      <div>{props.children}</div>
+      </Box>
+
+      <Box
+        style={{
+          width: "100%",
+          padding: "47px 50px",
+        }}
+      >
+        <Search />
+        {props.children}
+      </Box>
     </main>
   );
 }
